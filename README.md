@@ -67,3 +67,4 @@ Si ya terminaste, o son las 10:00, asegurate de seguir los siguientes pasos para
 | `/register` | Registro de usuario | Ya implementada |
 | `/movies` | Listado de películas con buscador | Ya implementada |
 | `/movies/[id]` | Detalle de película | |
+
