@@ -1,25 +1,40 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function MovieTable({ movies }) {
   const [search, setSearch] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("");
   const [sortAsc, setSortAsc] = useState(true);
+  const router = useRouter();
 
   // TODO (ejercicio 2): reemplazar `movies` con el filtro por título usando `search`
   // Pista: .filter((m) => m.title?.toLowerCase().includes(search.toLowerCase()))
-  const filteredMovies = movies;
+  const filteredMovies = movies.filter((m) => 
+    m.title?.toLowerCase().includes(search.toLowerCase())
+  );
+
+  // console.log("Movies", movies)
+  // console.log("Selected genre", selectedGenre)
 
   // TODO (ejercicio 3): reemplazar `filteredMovies` con el filtro por género usando `selectedGenre`
   // Si `selectedGenre` está vacío (""), no filtrar. Pista: cada película tiene un array `genres`,
   // podés usar .includes(selectedGenre) para verificar si el género está en el array.
-  const genreFilteredMovies = filteredMovies;
+  const genreFilteredMovies = selectedGenre === ""
+    ? filteredMovies
+    : filteredMovies.filter((m) => m.genres?.includes(selectedGenre));
 
   // TODO (ejercicio 5): reemplazar `genreFilteredMovies` con el array ordenado por `year`
   // Si `sortAsc` es true → menor a mayor; si es false → mayor a menor.
   // Importante: no mutar el array original, usá [...genreFilteredMovies].sort(...)
-  const sortedMovies = genreFilteredMovies;
+  const sortedMovies = [...genreFilteredMovies].sort((a, b) =>{
+    if (sortAsc){
+      return a.year - b.year;
+    } else {
+      return b.year - a.year;
+    }
+  });
 
   return (
     <div className="flex flex-col gap-4">
@@ -34,7 +49,7 @@ export default function MovieTable({ movies }) {
         <select
           value={selectedGenre}
           onChange={(e) => setSelectedGenre(e.target.value)}
-          className="rounded-lg border border-white/20 bg-zinc-900 px-4 py-2.5 text-white outline-none focus:border-white/50"
+          className="rounded-lg border border-white/20 bg-zinc-900 px-4 py-2.5 text-white outline-none focus:border-white/50 cursor-pointer"
         >
           <option value="">Todos los géneros</option>
           <option value="Action">Action</option>
@@ -51,7 +66,7 @@ export default function MovieTable({ movies }) {
         <button
           type="button"
           onClick={() => setSortAsc(!sortAsc)}
-          className="rounded-lg border border-white/20 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white transition hover:border-white/50 hover:bg-white/10"
+          className="rounded-lg border border-white/20 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white transition hover:border-white/50 hover:bg-white/10 cursor-pointer"
         >
           Año {sortAsc ? "↑" : "↓"}
         </button>
@@ -62,26 +77,29 @@ export default function MovieTable({ movies }) {
             <tr>
               <th className="px-6 py-3">Título</th>
               {/* TODO (ejercicio 1): agregar <th> para la columna Año */}
+              <th className="px-6 py-3">Year</th>
               <th className="px-6 py-3">Plot</th>
               <th className="px-6 py-3">Cast</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5">
-            {sortedMovies.map((movie) => (
+            { sortedMovies.map((movie) => (
               <tr key={movie._id} className="transition hover:bg-white/5 focus-within:bg-white/5">
                 <td className="px-6 py-4 font-semibold text-white">
                   <button
                     type="button"
-                    className="block text-left text-inherit"
+                    className="block text-left text-inherit cursor-pointer"
                     onClick={() => {
                       console.log(`Seleccionada película: ${movie._id} - ${movie.title}`);
                       // TODO (ejercicio 4): redirigir a /movies/${movie._id}
+                      router.push(`/movies/${movie._id}`);
                     }}
                   >
                     {movie.title}
                   </button>
                 </td>
                 {/* TODO (ejercicio 1): agregar <td> con movie.year ?? "-" */}
+                <td className="px-6 py-4 text-zinc-200">{movie.year || "-"}</td>
                 <td className="px-6 py-4 text-zinc-200">{movie.plot || "-"}</td>
                 <td className="px-6 py-4 text-zinc-200">
                   {movie.cast?.length ? movie.cast.join(", ") : "-"}
