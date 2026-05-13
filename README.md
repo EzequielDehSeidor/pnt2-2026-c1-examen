@@ -65,6 +65,9 @@ Si ya terminaste, o son las 10:00, asegurate de seguir los siguientes pasos para
 | `/` | Página de inicio | Ya implementada |
 | `/login` | Inicio de sesión | Ya implementada |
 | `/register` | Registro de usuario | Ya implementada |
-| `/movies` | Listado de películas con buscador | Ya implementada |
-| `/movies/[id]` | Detalle de película | |
+| `/movies` | Agregar columna Año | Ya implementada |
+| `/movies` | Buscador por título | Ya implementada |
+| `/movies` | Filtro por género | Ya implementada |
+| `/movies` | Ordenamiento por año | Ya implementada |
+| `/movies/[id]` | Detalle de película | Ya implementada |
 
